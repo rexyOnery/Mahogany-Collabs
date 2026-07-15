@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { LogOut, Search, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -19,8 +20,17 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <Link href="/" className="brand" aria-label="Mahogany Archives home">
-        <span className="brand-mark">MA</span>
-        <span>
+        <span className="brand-logo-mark-frame" aria-hidden="true">
+          <Image
+            src="/images/mahogany-logo.jpeg"
+            alt=""
+            width={96}
+            height={96}
+            priority
+            className="brand-logo-mark-image"
+          />
+        </span>
+        <span className="brand-wordmark" aria-hidden="true">
           <strong>Mahogany</strong>
           <small>Archives</small>
         </span>

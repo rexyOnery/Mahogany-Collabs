@@ -8,10 +8,7 @@ import {
   UsersRound
 } from "lucide-react";
 import Link from "next/link";
-import { CollectionCard } from "@/components/collection-card";
 import { HeroSearch } from "@/components/hero-search";
-import { InfoCard } from "@/components/info-card";
-import { SectionHeading } from "@/components/section-heading";
 import { archivePillars, exploreTools } from "@/lib/archive-data";
 import {
   getCommunityHighlights,
@@ -20,6 +17,21 @@ import {
 } from "@/services/archive-service";
 
 const toolIcons = [Search, LibraryBig, Clock3, MapPinned];
+const pillarIcons = [BookOpen, LibraryBig, UsersRound, GraduationCap];
+const collectionCrops = [
+  "crop-rare",
+  "crop-manuscripts",
+  "crop-photos",
+  "crop-oral",
+  "crop-artifacts"
+];
+const communityPhotoCrops = ["crop-amina", "crop-marcus", "crop-leah"];
+const resourceCrops = [
+  "crop-teaching",
+  "crop-guides",
+  "crop-webinars",
+  "crop-exhibitions"
+];
 
 export default async function HomePage() {
   const [collections, resources, community] = await Promise.all([
@@ -29,14 +41,18 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main>
-      <section className="hero">
+    <main className="home-page">
+      <section className="home-hero">
+        <div className="home-hero-art" aria-hidden="true" />
         <div className="hero-content">
-          <p className="eyebrow">Digital Heritage Collection</p>
-          <h1>Mahogany Archives</h1>
+          <h1>
+            <span>Preserving Our Heritage.</span>
+            <em>Inspiring Our Future.</em>
+          </h1>
           <p className="hero-lede">
-            Preserving our heritage and inspiring our future through books,
-            photographs, oral histories, artifacts, and community memory.
+            Mahogany Archives preserves and provides access to books, texts,
+            oral histories, photographs, and cultural materials from across the
+            African Diaspora and beyond.
           </p>
           <HeroSearch />
           <Link href="/advanced-search" className="advanced-link">
@@ -45,13 +61,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="pillar-band">
+      <section className="home-pillar-band">
         {archivePillars.map((pillar, index) => {
-          const icons = [BookOpen, LibraryBig, UsersRound, GraduationCap];
-          const Icon = icons[index];
+          const Icon = pillarIcons[index];
           return (
-            <div className="pillar" key={pillar.title}>
-              <Icon size={28} />
+            <div className="home-pillar" key={pillar.title}>
+              <Icon size={27} strokeWidth={1.5} />
               <div>
                 <h2>{pillar.title}</h2>
                 <p>{pillar.description}</p>
@@ -61,85 +76,108 @@ export default async function HomePage() {
         })}
       </section>
 
-      <section className="content-section">
-        <SectionHeading
-          title="Featured Collections"
-          actionHref="/collections"
-          actionLabel="View all collections"
-        />
-        <div className="collection-grid">
-          {collections.map((collection) => (
-            <CollectionCard collection={collection} key={collection.slug} />
+      <section className="home-section home-featured">
+        <div className="home-section-heading">
+          <div className="home-title-rule">
+            <h2>Featured Collections</h2>
+            <span />
+          </div>
+          <Link href="/collections">View all collections</Link>
+        </div>
+        <div className="home-collection-grid">
+          {collections.slice(0, 5).map((collection, index) => (
+            <Link
+              href={`/collections/${collection.slug}`}
+              className="home-collection-card"
+              key={collection.slug}
+            >
+              <span className={`home-reference-crop ${collectionCrops[index]}`} />
+              <span className="home-card-body">
+                <strong>{collection.title}</strong>
+                <small>{collection.itemCount.toLocaleString()} items</small>
+              </span>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="explore-band">
-        <div className="explore-intro">
-          <p className="eyebrow">Discover and Explore</p>
-          <h2>Powerful tools for research and storytelling</h2>
+      <section className="home-explore-band">
+        <div className="home-explore-intro">
+          <h2>Discover &amp; Explore</h2>
+          <p>
+            Powerful tools to help you find, organize, and engage with archival
+            materials.
+          </p>
           <Link href="/advanced-search" className="button">
             Go to Advanced Search
           </Link>
         </div>
-        <div className="tool-grid">
+        <div className="home-tool-grid">
           {exploreTools.map((tool, index) => {
             const Icon = toolIcons[index];
             return (
-              <InfoCard
-                key={tool.title}
-                icon={<Icon size={26} />}
-                title={tool.title}
-                description={tool.description}
-                href={tool.href}
-                actionLabel="Explore"
-              />
+              <Link href={tool.href} className="home-tool" key={tool.title}>
+                <Icon size={29} strokeWidth={1.4} />
+                <strong>{tool.title}</strong>
+                <span>{tool.description}</span>
+              </Link>
             );
           })}
         </div>
       </section>
 
-      <section className="content-section">
-        <SectionHeading
-          title="Our Community"
-          actionHref="/community"
-          actionLabel="Meet the community"
-        />
-        <div className="community-strip">
-          <div className="community-join">
-            <UsersRound size={28} />
+      <section className="home-section home-community-section">
+        <div className="home-section-heading">
+          <h2>Our Community</h2>
+          <Link href="/community">Meet the Community</Link>
+        </div>
+        <div className="home-community-strip">
+          <div className="home-community-join">
+            <UsersRound size={25} strokeWidth={1.4} />
             <h3>A Global Community of Researchers, Educators, and Storytellers</h3>
-            <p>Join members contributing to a living archive.</p>
+            <p>Join thousands of members contributing to a living archive.</p>
             <Link href="/community" className="button button-light">
               Join the Community
             </Link>
           </div>
-          {community.map((member) => (
-            <article className="quote-card" key={member.name}>
+          {community.map((member, index) => (
+            <div className="home-community-pair" key={member.name}>
+              <span className={`home-reference-crop ${communityPhotoCrops[index]}`} />
+              <article>
               <h3>{member.name}</h3>
               <span>{member.role}</span>
               <p>{member.quote}</p>
             </article>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="content-section">
-        <SectionHeading
-          title="Learn and Grow"
-          actionHref="/learn"
-          actionLabel="Explore all resources"
-        />
-        <div className="resource-grid">
-          {resources.map((resource) => (
-            <InfoCard
+      <section className="home-section home-learn">
+        <div className="home-section-heading">
+          <h2>Learn &amp; Grow</h2>
+          <Link href="/learn">Explore all resources</Link>
+        </div>
+        <div className="home-resource-grid">
+          {resources.slice(0, 4).map((resource, index) => (
+            <Link
               key={resource.title}
-              icon={<GraduationCap size={24} />}
-              title={resource.title}
-              description={resource.description}
               href={resource.href}
-              actionLabel="Open"
-            />
+              className={`home-resource-card ${resourceCrops[index]}`}
+            >
+              <GraduationCap size={20} strokeWidth={1.4} />
+              <strong>{resource.title}</strong>
+              <span>{resource.description}</span>
+              <small>
+                {index === 0
+                  ? "Browse Resources"
+                  : index === 1
+                    ? "View Guides"
+                    : index === 2
+                      ? "See Upcoming Events"
+                      : "View Exhibitions"}
+              </small>
+            </Link>
           ))}
         </div>
       </section>

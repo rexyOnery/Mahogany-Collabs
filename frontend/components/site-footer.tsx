@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Instagram, Mail, Youtube } from "lucide-react";
 
 const columns = [
@@ -45,11 +46,13 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-brand">
         <Link href="/" className="brand brand-footer">
-          <span className="brand-mark">MA</span>
-          <span>
-            <strong>Mahogany</strong>
-            <small>Archives</small>
-          </span>
+          <Image
+            src="/images/mahogany-logo.jpeg"
+            alt="Mahogany Archives"
+            width={260}
+            height={260}
+            className="brand-logo brand-logo-footer"
+          />
         </Link>
         <p>Preserving the past. Illuminating the present. Inspiring the future.</p>
         <div className="social-row" aria-label="Social links">
