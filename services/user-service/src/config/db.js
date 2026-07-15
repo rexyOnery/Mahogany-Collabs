@@ -1,0 +1,9 @@
+import mongoose from "mongoose";
+import { logger } from "@archive/shared";
+import { env } from "./env.js";
+
+export const connectDb = async () => {
+  mongoose.set("strictQuery", true);
+  await mongoose.connect(env.mongoUri);
+  logger.info("User database connected");
+};

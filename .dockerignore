@@ -1,0 +1,13 @@
+node_modules
+**/node_modules
+.git
+.next
+**/.next
+coverage
+**/coverage
+.env
+.env.*
+!.env.example
+npm-debug.log*
+docker-data
+.vercel

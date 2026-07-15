@@ -1,0 +1,118 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: archive-frontend
+    environment:
+      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      api-gateway:
+        condition: service_started
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: archive-api-gateway
+    environment:
+      NODE_ENV: development
+      API_GATEWAY_PORT: 8080
+      FRONTEND_URL: http://localhost:3000
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-long-random-secret}
+      AUTH_SERVICE_URL: http://auth-service:4001
+      USER_SERVICE_URL: http://user-service:4002
+      ADMIN_SERVICE_URL: http://admin-service:4003
+    ports:
+      - "8080:8080"
+    depends_on:
+      auth-service:
+        condition: service_started
+      user-service:
+        condition: service_started
+      admin-service:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    container_name: archive-auth-service
+    environment:
+      NODE_ENV: development
+      AUTH_SERVICE_PORT: 4001
+      AUTH_MONGO_URI: mongodb://auth-mongo:27017/archive_auth
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-long-random-secret}
+      JWT_EXPIRES_IN: 1d
+    ports:
+      - "4001:4001"
+    depends_on:
+      auth-mongo:
+        condition: service_started
+
+  user-service:
+    build:
+      context: .
+      dockerfile: services/user-service/Dockerfile
+    container_name: archive-user-service
+    environment:
+      NODE_ENV: development
+      USER_SERVICE_PORT: 4002
+      USER_MONGO_URI: mongodb://user-mongo:27017/archive_users
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-long-random-secret}
+    ports:
+      - "4002:4002"
+    depends_on:
+      user-mongo:
+        condition: service_started
+
+  admin-service:
+    build:
+      context: .
+      dockerfile: services/admin-service/Dockerfile
+    container_name: archive-admin-service
+    environment:
+      NODE_ENV: development
+      ADMIN_SERVICE_PORT: 4003
+      ADMIN_MONGO_URI: mongodb://admin-mongo:27017/archive_admin
+      JWT_SECRET: ${JWT_SECRET:-replace-with-a-long-random-secret}
+    ports:
+      - "4003:4003"
+    depends_on:
+      admin-mongo:
+        condition: service_started
+
+  auth-mongo:
+    image: mongo:7
+    container_name: archive-auth-mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - auth-mongo-data:/data/db
+
+  user-mongo:
+    image: mongo:7
+    container_name: archive-user-mongo
+    ports:
+      - "27019:27017"
+    volumes:
+      - user-mongo-data:/data/db
+
+  admin-mongo:
+    image: mongo:7
+    container_name: archive-admin-mongo
+    ports:
+      - "27020:27017"
+    volumes:
+      - admin-mongo-data:/data/db
+
+volumes:
+  auth-mongo-data:
+  user-mongo-data:
+  admin-mongo-data:
