@@ -1,0 +1,43 @@
+services:
+  frontend:
+    container_name: archive-frontend-dev
+    image: nextjs-archive-microservices-app-frontend-dev
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: npm run dev -- --turbo
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8080
+    volumes:
+      - frontend-dev-node-modules:/app/node_modules
+      - frontend-dev-next-cache:/app/.next
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+            - package.json
+            - package-lock.json
+            - next.config.mjs
+            - tsconfig.json
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/package-lock.json
+        - action: sync+restart
+          path: ./frontend/next.config.mjs
+          target: /app/next.config.mjs
+        - action: sync+restart
+          path: ./frontend/tsconfig.json
+          target: /app/tsconfig.json
+
+volumes:
+  frontend-dev-node-modules:
+  frontend-dev-next-cache:

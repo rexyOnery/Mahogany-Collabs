@@ -11,7 +11,9 @@
     "shared"
   ],
   "scripts": {
-    "dev": "docker compose up --build",
+    "dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build",
+    "dev:docker": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build",
+    "prod:docker": "docker compose up --build",
     "dev:frontend": "npm --workspace frontend run dev",
     "dev:gateway": "npm --workspace api-gateway run dev",
     "build": "npm --workspaces --if-present run build",

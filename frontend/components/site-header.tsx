@@ -61,10 +61,10 @@ export function SiteHeader() {
         ) : (
           <>
             <Link href="/login" className="text-link">
-              Log In
+              Log Ins
             </Link>
             <Link href="/sign-up" className="button button-small">
-              Sign Up
+              Sign Upo
             </Link>
           </>
         )}

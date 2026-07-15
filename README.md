@@ -89,10 +89,27 @@ npm --workspace admin-service run dev
 
 ## Docker
 
-Run the full local system:
+Run the full local system with Docker and Next.js hot reloading:
 
 ```bash
-docker compose up --build
+npm run dev
+```
+
+This uses `docker-compose.dev.yml` to run the frontend with `next dev`, bind
+syncs `frontend/` into the container with Docker Compose Watch, keeps
+`node_modules` and `.next` in Docker volumes, and enables polling so changes
+from Windows reliably trigger Fast Refresh.
+
+You can also run the same setup directly:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --watch --build
+```
+
+Run the production-style Docker build:
+
+```bash
+npm run prod:docker
 ```
 
 Useful URLs:
