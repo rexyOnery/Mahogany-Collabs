@@ -5,9 +5,8 @@ import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mahogany Archives — Preserving Our Heritage. Inspiring Our Future.",
-  description:
-    "Preserving and sharing books, oral histories, photographs, and cultural materials from across the African Diaspora."
+  title: "Mahogany Archives",
+  description: "Mahogany Archives — preserving and sharing cultural heritage."
 };
 
 export default function RootLayout({

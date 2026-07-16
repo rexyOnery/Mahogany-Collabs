@@ -23,7 +23,7 @@ export function HeroSearch() {
         type="search"
         name="query"
         aria-label="Search archive collection"
-        placeholder="Search the Mahogany Archives collection…"
+        placeholder="Search the Mahogany Archives collection..."
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
@@ -35,10 +35,9 @@ export function HeroSearch() {
           onChange={(event) => setCollection(event.target.value)}
         >
           <option value="all">All Collections</option>
-          <option value="books">Rare Books &amp; Texts</option>
-          <option value="manuscripts">Manuscripts &amp; Letters</option>
-          <option value="images">Photographs &amp; Prints</option>
-          <option value="audio">Oral Histories</option>
+          <option value="books">Books &amp; Texts</option>
+          <option value="manuscripts">Manuscripts</option>
+          <option value="images">Photographs</option>
         </select>
         <ChevronDown size={16} />
       </label>
