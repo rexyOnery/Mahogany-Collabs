@@ -20,19 +20,25 @@ export function HeroSearch() {
   return (
     <form className="hero-search" onSubmit={onSubmit}>
       <input
+        type="search"
+        name="query"
         aria-label="Search archive collection"
-        placeholder="Search the Mahogany Archives collection..."
+        placeholder="Search the Mahogany Archives collection…"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
       <label className="select-wrap">
         <span className="sr-only">Collection filter</span>
-        <select value={collection} onChange={(event) => setCollection(event.target.value)}>
+        <select
+          name="collection"
+          value={collection}
+          onChange={(event) => setCollection(event.target.value)}
+        >
           <option value="all">All Collections</option>
-          <option value="books">Books</option>
-          <option value="manuscripts">Manuscripts</option>
-          <option value="images">Images</option>
-          <option value="audio">Audio</option>
+          <option value="books">Rare Books &amp; Texts</option>
+          <option value="manuscripts">Manuscripts &amp; Letters</option>
+          <option value="images">Photographs &amp; Prints</option>
+          <option value="audio">Oral Histories</option>
         </select>
         <ChevronDown size={16} />
       </label>

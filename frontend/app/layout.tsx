@@ -5,9 +5,9 @@ import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Mahogany Archives",
+  title: "Mahogany Archives — Preserving Our Heritage. Inspiring Our Future.",
   description:
-    "A Next.js microservices starter for preserving and exploring African diaspora archive collections."
+    "Preserving and sharing books, oral histories, photographs, and cultural materials from across the African Diaspora."
 };
 
 export default function RootLayout({
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <Providers>
           <SiteHeader />
           {children}

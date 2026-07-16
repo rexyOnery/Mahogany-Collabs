@@ -6,7 +6,7 @@ import type {
 
 export const fallbackCollections: Collection[] = [
   {
-    title: "Rare Books and Texts",
+    title: "Rare Books & Texts",
     slug: "rare-books-and-texts",
     category: "Books",
     description:
@@ -19,7 +19,7 @@ export const fallbackCollections: Collection[] = [
     featured: true
   },
   {
-    title: "Manuscripts and Letters",
+    title: "Manuscripts & Letters",
     slug: "manuscripts-and-letters",
     category: "Manuscripts",
     description:
@@ -32,7 +32,7 @@ export const fallbackCollections: Collection[] = [
     featured: true
   },
   {
-    title: "Photographs and Prints",
+    title: "Photographs & Prints",
     slug: "photographs-and-prints",
     category: "Images",
     description:
@@ -58,7 +58,7 @@ export const fallbackCollections: Collection[] = [
     featured: true
   },
   {
-    title: "Artifacts and Ephemera",
+    title: "Artifacts & Ephemera",
     slug: "artifacts-and-ephemera",
     category: "Objects",
     description:
@@ -75,7 +75,7 @@ export const fallbackCollections: Collection[] = [
 export const fallbackResources: LearningResource[] = [
   {
     title: "Teaching Resources",
-    description: "Lesson plans, primary sources, and classroom activities for all ages.",
+    description: "Lesson plans, primary sources, and activities for all ages.",
     href: "/learn#teaching"
   },
   {
@@ -84,13 +84,13 @@ export const fallbackResources: LearningResource[] = [
     href: "/learn#guides"
   },
   {
-    title: "Webinars and Events",
-    description: "Upcoming conversations with scholars and archivists.",
+    title: "Webinars & Events",
+    description: "Join conversations and learn from scholars and experts.",
     href: "/learn#events"
   },
   {
     title: "Exhibitions",
-    description: "Digital exhibits curated from archive materials.",
+    description: "Explore digital exhibits curated by our team.",
     href: "/learn#exhibitions"
   }
 ];
@@ -104,7 +104,7 @@ export const fallbackCommunity: CommunityHighlight[] = [
   {
     name: "Marcus Thompson",
     role: "Educator",
-    quote: "I use primary materials from the archive to bring real voices into my classroom."
+    quote: "I use primary materials from the Archives to bring real voices into my classroom."
   },
   {
     name: "Leah Mensah",
