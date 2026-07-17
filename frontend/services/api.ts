@@ -1,7 +1,7 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8080";
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8090";
 
-type ApiEnvelope<T> = {
+export type ApiEnvelope<T> = {
   success: boolean;
   message: string;
   data: T;

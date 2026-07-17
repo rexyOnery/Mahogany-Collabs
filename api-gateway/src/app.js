@@ -20,7 +20,7 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: env.frontendUrl,
+    origin: env.allowedOrigins,
     credentials: true
   })
 );
@@ -35,12 +35,23 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan(env.nodeEnv === "production" ? "combined" : "dev"));
 
+export const stripUpstreamCorsHeaders = (proxyRes) => {
+  for (const header of Object.keys(proxyRes.headers || {})) {
+    if (header.toLowerCase().startsWith("access-control-")) {
+      delete proxyRes.headers[header];
+    }
+  }
+};
+
 const proxy = (target, servicePrefix) =>
   createProxyMiddleware({
     target,
     changeOrigin: true,
     pathRewrite: (path) => `${servicePrefix}${path}`,
     on: {
+      proxyRes(proxyRes) {
+        stripUpstreamCorsHeaders(proxyRes);
+      },
       proxyReq(proxyReq, req) {
         attachIdentityHeaders(proxyReq, req);
         fixRequestBody(proxyReq, req);
@@ -59,13 +70,14 @@ const proxy = (target, servicePrefix) =>
     }
   });
 
-const isPublicAdminGet = (req) => {
+export const isPublicAdminGet = (req) => {
   if (req.method !== "GET") {
     return false;
   }
 
   const path = req.originalUrl.split("?")[0];
   return [
+    /^\/api\/admin\/items(\/.*)?$/,
     /^\/api\/admin\/collections(\/.*)?$/,
     /^\/api\/admin\/resources$/,
     /^\/api\/admin\/community$/

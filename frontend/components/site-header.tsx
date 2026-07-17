@@ -85,6 +85,7 @@ export function SiteHeader() {
         ) : (
           <>
             <Link href="/login">Log In</Link>
+            <Link href="/login?mode=admin&next=/admin">Admin</Link>
             <Link className="matched-signup-button" href="/sign-up">
               Sign Up
             </Link>

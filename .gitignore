@@ -14,6 +14,8 @@ out/
 dist/
 build/
 coverage/
+uploads/
+services/admin-service/uploads/
 
 *.local
 *.log
