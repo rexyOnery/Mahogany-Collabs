@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { LogOut, Search, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { LogOut, ShieldCheck } from "lucide-react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
 const navItems = [
@@ -16,55 +17,77 @@ const navItems = [
 
 export function SiteHeader() {
   const { user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+  const handleLogout = () => {
+    closeMenu();
+    logout();
+  };
 
   return (
-    <header className="site-header">
-      <Link href="/" className="brand" aria-label="Mahogany Archives home">
-        <span className="brand-logo-mark-frame" aria-hidden="true">
-          <Image
-            src="/images/mahogany-logo.jpeg"
-            alt=""
-            width={96}
-            height={96}
-            priority
-            className="brand-logo-mark-image"
-          />
-        </span>
-        <span className="brand-wordmark" aria-hidden="true">
-          <strong>Mahogany</strong>
-          <small>Archives</small>
-        </span>
+    <header className="site-header matched-site-header">
+      <Link href="/" className="matched-brand" aria-label="Mahogany Archives home" onClick={closeMenu}>
+        <Image
+          className="matched-brand-logo"
+          src="/images/mahogany-archives/mahogany-logo-enhanced.png"
+          alt="Mahogany Archives"
+          width={1160}
+          height={356}
+          priority
+        />
       </Link>
 
-      <nav className="primary-nav" aria-label="Primary navigation">
+      <button
+        className="matched-menu-toggle"
+        type="button"
+        aria-expanded={menuOpen}
+        aria-controls="main-navigation"
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        Menu
+      </button>
+
+      <nav
+        id="main-navigation"
+        className={`matched-main-nav${menuOpen ? " open" : ""}`}
+        aria-label="Primary navigation"
+      >
         {navItems.map((item) => (
-          <Link href={item.href} key={item.href}>
+          <Link href={item.href} key={item.href} onClick={closeMenu}>
             {item.label}
           </Link>
         ))}
       </nav>
 
-      <div className="header-actions">
-        <Link href="/advanced-search" className="icon-button" aria-label="Search">
-          <Search size={18} />
+      <div className="matched-header-actions">
+        <Link href="/advanced-search" className="matched-icon-button" aria-label="Search">
+          <span aria-hidden="true">⌕</span>
         </Link>
         {user ? (
           <>
-            <Link href={user.role === "admin" ? "/admin" : "/dashboard"} className="user-chip">
-              <ShieldCheck size={16} />
+            <Link
+              href={user.role === "admin" ? "/admin" : "/dashboard"}
+              className="matched-user-chip"
+            >
+              <ShieldCheck size={15} />
               {user.name}
             </Link>
-            <button className="icon-button" type="button" onClick={logout} aria-label="Log out">
-              <LogOut size={18} />
+            <button
+              className="matched-icon-button"
+              type="button"
+              onClick={handleLogout}
+              aria-label="Log out"
+            >
+              <LogOut size={16} />
             </button>
           </>
         ) : (
           <>
-            <Link href="/login" className="text-link">
-              Log Ins
-            </Link>
-            <Link href="/sign-up" className="button button-small">
-              Sign Upo
+            <Link href="/login">Log In</Link>
+            <Link href="/login?mode=admin&next=/admin">Admin</Link>
+            <Link className="matched-signup-button" href="/sign-up">
+              Sign Up
             </Link>
           </>
         )}

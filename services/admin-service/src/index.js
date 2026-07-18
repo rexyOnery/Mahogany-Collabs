@@ -1,11 +1,12 @@
 import app from "./app.js";
-import { connectDb } from "./config/db.js";
+import { connectDb, ensureAdminIndexes } from "./config/db.js";
 import { env } from "./config/env.js";
 import { seedArchiveData } from "./services/archive.service.js";
 import { logger } from "@archive/shared";
 
 try {
   await connectDb();
+  await ensureAdminIndexes();
   await seedArchiveData();
   app.listen(env.port, () => {
     logger.info("Admin Service listening", { port: env.port });

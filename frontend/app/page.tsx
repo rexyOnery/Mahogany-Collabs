@@ -1,184 +1,229 @@
-import {
-  BookOpen,
-  Clock3,
-  GraduationCap,
-  LibraryBig,
-  MapPinned,
-  Search,
-  UsersRound
-} from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { ArchiveItemCard } from "@/components/archive-item-card";
+import { FeaturedCollectionsCarousel } from "@/components/featured-collections-carousel";
 import { HeroSearch } from "@/components/hero-search";
 import { archivePillars, exploreTools } from "@/lib/archive-data";
 import {
   getCommunityHighlights,
+  getArchiveItemFeed,
   getFeaturedCollections,
   getLearningResources
 } from "@/services/archive-service";
 
-const toolIcons = [Search, LibraryBig, Clock3, MapPinned];
-const pillarIcons = [BookOpen, LibraryBig, UsersRound, GraduationCap];
-const collectionCrops = [
-  "crop-rare",
-  "crop-manuscripts",
-  "crop-photos",
-  "crop-oral",
-  "crop-artifacts"
+const missionSymbols = ["▤", "◎", "♙", "⌂"];
+const exploreSymbols = ["◉", "▥", "◷", "⌖"];
+
+const communityImages = [
+  {
+    src: "/images/mahogany-archives/community-amina.jpg",
+    alt: "Portrait of Dr. Amina Johnson",
+    width: 87
+  },
+  {
+    src: "/images/mahogany-archives/community-marcus.jpg",
+    alt: "Portrait of Marcus Thompson",
+    width: 85
+  },
+  {
+    src: "/images/mahogany-archives/community-leah.jpg",
+    alt: "Portrait of Leah Mensah",
+    width: 87
+  }
 ];
-const communityPhotoCrops = ["crop-amina", "crop-marcus", "crop-leah"];
-const resourceCrops = [
-  "crop-teaching",
-  "crop-guides",
-  "crop-webinars",
-  "crop-exhibitions"
+
+const learningImages = [
+  {
+    src: "/images/mahogany-archives/learn-teaching.jpg",
+    alt: "Archive classroom",
+    width: 199
+  },
+  {
+    src: "/images/mahogany-archives/learn-research.jpg",
+    alt: "Open book and coffee",
+    width: 198
+  },
+  {
+    src: "/images/mahogany-archives/learn-webinars.jpg",
+    alt: "Microphone for webinars",
+    width: 198
+  },
+  {
+    src: "/images/mahogany-archives/learn-exhibitions.jpg",
+    alt: "Museum exhibition gallery",
+    width: 187
+  }
+];
+
+const resourceActions = [
+  "Browse Resources",
+  "View Guides",
+  "See Upcoming Events",
+  "View Exhibitions"
 ];
 
 export default async function HomePage() {
-  const [collections, resources, community] = await Promise.all([
+  const [collections, archiveItemFeed, resources, community] = await Promise.all([
     getFeaturedCollections(),
+    getArchiveItemFeed({ limit: 4 }),
     getLearningResources(),
     getCommunityHighlights()
   ]);
 
   return (
-    <main className="home-page">
-      <section className="home-hero">
-        <div className="home-hero-art" aria-hidden="true" />
-        <div className="hero-content">
+    <main className="matched-home">
+      <section className="matched-hero">
+        <div className="matched-hero-copy">
           <h1>
-            <span>Preserving Our Heritage.</span>
+            Preserving Our Heritage.
+            <br />
             <em>Inspiring Our Future.</em>
           </h1>
-          <p className="hero-lede">
+          <p>
             Mahogany Archives preserves and provides access to books, texts,
             oral histories, photographs, and cultural materials from across the
             African Diaspora and beyond.
           </p>
           <HeroSearch />
-          <Link href="/advanced-search" className="advanced-link">
-            Advanced Search
+          <Link href="/advanced-search" className="matched-advanced-link">
+            Advanced Search <span aria-hidden="true">↓</span>
           </Link>
         </div>
+        <div
+          className="matched-hero-image"
+          role="img"
+          aria-label="Antique books, archival portrait, catalogue card and manuscript"
+        />
       </section>
 
-      <section className="home-pillar-band">
-        {archivePillars.map((pillar, index) => {
-          const Icon = pillarIcons[index];
-          return (
-            <div className="home-pillar" key={pillar.title}>
-              <Icon size={27} strokeWidth={1.5} />
-              <div>
-                <h2>{pillar.title}</h2>
-                <p>{pillar.description}</p>
-              </div>
+      <section className="matched-mission-strip" aria-label="Our mission">
+        {archivePillars.map((pillar, index) => (
+          <article key={pillar.title}>
+            <span aria-hidden="true">{missionSymbols[index]}</span>
+            <div>
+              <h2>{pillar.title}</h2>
+              <p>{pillar.description}</p>
             </div>
-          );
-        })}
+          </article>
+        ))}
       </section>
 
-      <section className="home-section home-featured">
-        <div className="home-section-heading">
-          <div className="home-title-rule">
-            <h2>Featured Collections</h2>
-            <span />
+      <section id="collections" className="matched-section">
+        <div className="matched-section-heading">
+          <h2>Featured Collections</h2>
+          <Link href="/collections">View all collections →</Link>
+        </div>
+        <FeaturedCollectionsCarousel collections={collections} />
+      </section>
+
+      {/* <section id="new-additions" className="matched-section archive-home-additions">
+        <div className="matched-section-heading">
+          <h2>New Additions</h2>
+          <Link href="/advanced-search">Search all public records →</Link>
+        </div>
+        {archiveItemFeed.unavailable ? (
+          <p className="error-banner" role="alert">
+            New archive additions are temporarily unavailable.
+          </p>
+        ) : archiveItemFeed.items.length ? (
+          <div className="archive-record-grid archive-record-grid--home">
+            {archiveItemFeed.items.map((item) => (
+              <ArchiveItemCard item={item} key={item.slug} />
+            ))}
           </div>
-          <Link href="/collections">View all collections</Link>
-        </div>
-        <div className="home-collection-grid">
-          {collections.slice(0, 5).map((collection, index) => (
-            <Link
-              href={`/collections/${collection.slug}`}
-              className="home-collection-card"
-              key={collection.slug}
-            >
-              <span className={`home-reference-crop ${collectionCrops[index]}`} />
-              <span className="home-card-body">
-                <strong>{collection.title}</strong>
-                <small>{collection.itemCount.toLocaleString()} items</small>
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
+        ) : (
+          <p className="notice">No public archive items have been added yet.</p>
+        )}
+      </section> */}
 
-      <section className="home-explore-band">
-        <div className="home-explore-intro">
+      <section id="explore" className="matched-explore-band">
+        <div className="matched-explore-intro">
           <h2>Discover &amp; Explore</h2>
           <p>
             Powerful tools to help you find, organize, and engage with archival
             materials.
           </p>
-          <Link href="/advanced-search" className="button">
+          <Link className="matched-button" href="/advanced-search">
             Go to Advanced Search
           </Link>
         </div>
-        <div className="home-tool-grid">
-          {exploreTools.map((tool, index) => {
-            const Icon = toolIcons[index];
+
+        {exploreTools.map((tool, index) => (
+          <article key={tool.title}>
+            <span aria-hidden="true">{exploreSymbols[index]}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.description}</p>
+          </article>
+        ))}
+      </section>
+
+      <section id="community" className="matched-section">
+        <div className="matched-section-heading">
+          <h2>Our Community</h2>
+          <Link href="/community">Meet the Community →</Link>
+        </div>
+
+        <div className="matched-community-grid">
+          <article className="matched-join-card">
+            <h3>
+              A Global Community
+              <br />
+              of Researchers, Educators,
+              <br />
+              and Storytellers
+            </h3>
+            <p>Join thousands of members contributing to a living archive.</p>
+            <Link className="matched-button matched-button-light" href="/community">
+              Join the Community
+            </Link>
+          </article>
+
+          {community.slice(0, 3).map((member, index) => {
+            const image = communityImages[index];
             return (
-              <Link href={tool.href} className="home-tool" key={tool.title}>
-                <Icon size={29} strokeWidth={1.4} />
-                <strong>{tool.title}</strong>
-                <span>{tool.description}</span>
-              </Link>
+              <article className="matched-person-card" key={member.name}>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={119}
+                />
+                <div>
+                  <h3>{member.name}</h3>
+                  <small>{member.role}</small>
+                  <blockquote>“{member.quote}”</blockquote>
+                </div>
+              </article>
             );
           })}
         </div>
       </section>
 
-      <section className="home-section home-community-section">
-        <div className="home-section-heading">
-          <h2>Our Community</h2>
-          <Link href="/community">Meet the Community</Link>
-        </div>
-        <div className="home-community-strip">
-          <div className="home-community-join">
-            <UsersRound size={25} strokeWidth={1.4} />
-            <h3>A Global Community of Researchers, Educators, and Storytellers</h3>
-            <p>Join thousands of members contributing to a living archive.</p>
-            <Link href="/community" className="button button-light">
-              Join the Community
-            </Link>
-          </div>
-          {community.map((member, index) => (
-            <div className="home-community-pair" key={member.name}>
-              <span className={`home-reference-crop ${communityPhotoCrops[index]}`} />
-              <article>
-              <h3>{member.name}</h3>
-              <span>{member.role}</span>
-              <p>{member.quote}</p>
-            </article>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-section home-learn">
-        <div className="home-section-heading">
+      <section id="learn" className="matched-section matched-learn-section">
+        <div className="matched-section-heading">
           <h2>Learn &amp; Grow</h2>
-          <Link href="/learn">Explore all resources</Link>
+          <Link href="/learn">Explore all resources →</Link>
         </div>
-        <div className="home-resource-grid">
-          {resources.slice(0, 4).map((resource, index) => (
-            <Link
-              key={resource.title}
-              href={resource.href}
-              className={`home-resource-card ${resourceCrops[index]}`}
-            >
-              <GraduationCap size={20} strokeWidth={1.4} />
-              <strong>{resource.title}</strong>
-              <span>{resource.description}</span>
-              <small>
-                {index === 0
-                  ? "Browse Resources"
-                  : index === 1
-                    ? "View Guides"
-                    : index === 2
-                      ? "See Upcoming Events"
-                      : "View Exhibitions"}
-              </small>
-            </Link>
-          ))}
+
+        <div className="matched-learn-grid">
+          {resources.slice(0, 4).map((resource, index) => {
+            const image = learningImages[index];
+            return (
+              <article className="matched-learn-card" key={resource.title}>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={98}
+                />
+                <div>
+                  <h3>{resource.title}</h3>
+                  <p>{resource.description}</p>
+                  <Link href={resource.href}>{resourceActions[index]} →</Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
     </main>

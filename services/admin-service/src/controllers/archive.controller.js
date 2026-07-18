@@ -1,17 +1,39 @@
 import { asyncHandler, created, ok } from "@archive/shared";
 import {
+  createArchiveItem,
   createCollection,
   deleteCollection,
+  getArchiveItemBySlug,
+  getArchiveItemImageBySlug,
   getCollectionBySlug,
   getCommunityHighlights,
   getDashboardSummary,
   getLearningResources,
+  listArchiveItems,
   listCollections,
   listFeaturedCollections,
   listSubmissions,
   reviewSubmission,
   updateCollection
 } from "../services/archive.service.js";
+
+export const archiveItems = asyncHandler(async (req, res) => {
+  const data = await listArchiveItems(req.query);
+  return ok(res, data, "Archive items loaded");
+});
+
+export const archiveItemDetail = asyncHandler(async (req, res) => {
+  const data = await getArchiveItemBySlug(req.params.slug);
+  return ok(res, data, "Archive item loaded");
+});
+
+export const archiveItemImage = asyncHandler(async (req, res) => {
+  const data = await getArchiveItemImageBySlug(req.params.slug);
+  res.setHeader("Content-Type", data.image.mimeType);
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  return res.sendFile(data.image.storagePath);
+});
 
 export const collections = asyncHandler(async (req, res) => {
   const data = await listCollections(req.query);
@@ -44,6 +66,11 @@ export const dashboard = asyncHandler(async (req, res) => {
 export const create = asyncHandler(async (req, res) => {
   const data = await createCollection(req.body, req.user);
   return created(res, data, "Collection created");
+});
+
+export const createItem = asyncHandler(async (req, res) => {
+  const data = await createArchiveItem(req.body, req.file, req.user);
+  return created(res, data, "Archive item created");
 });
 
 export const update = asyncHandler(async (req, res) => {

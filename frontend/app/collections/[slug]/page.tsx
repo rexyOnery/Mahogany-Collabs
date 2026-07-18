@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, MapPinned } from "lucide-react";
-import { getCollection } from "@/services/archive-service";
+import { ArchiveItemCard } from "@/components/archive-item-card";
+import { SectionHeading } from "@/components/section-heading";
+import { getArchiveItemFeed, getCollection } from "@/services/archive-service";
 
 export default async function CollectionDetailPage({
   params
@@ -14,6 +16,11 @@ export default async function CollectionDetailPage({
   if (!collection) {
     notFound();
   }
+
+  const archiveItemFeed = await getArchiveItemFeed({
+    materialType: collection.category,
+    limit: 50
+  });
 
   return (
     <main className="page-shell">
@@ -28,7 +35,13 @@ export default async function CollectionDetailPage({
           <p>{collection.description}</p>
         </div>
         <aside className="detail-metadata">
-          <span>{collection.itemCount.toLocaleString()} items</span>
+          <span>
+            {archiveItemFeed.unavailable
+              ? "Online records unavailable"
+              : `${archiveItemFeed.items.length} online ${
+                  archiveItemFeed.items.length === 1 ? "record" : "records"
+                }`}
+          </span>
           <span>{collection.period}</span>
           <span>
             <MapPinned size={16} />
@@ -37,18 +50,29 @@ export default async function CollectionDetailPage({
         </aside>
       </section>
       <section className="record-list">
-        <h2>Sample Records</h2>
-        {["Catalog card", "Digitized object", "Research note"].map((record) => (
-          <article key={record} className="result-row">
-            <span>{collection.category}</span>
-            <div>
-              <h3>{record}</h3>
-              <p>
-                A representative archive record connected to {collection.title}.
-              </p>
-            </div>
-          </article>
-        ))}
+        <SectionHeading
+          eyebrow="From the archive database"
+          title="Public Records"
+          actionHref={`/advanced-search?materialType=${encodeURIComponent(
+            collection.category
+          )}`}
+          actionLabel="Search this format →"
+        />
+        {archiveItemFeed.unavailable ? (
+          <p className="error-banner" role="alert">
+            Records for this collection are temporarily unavailable.
+          </p>
+        ) : archiveItemFeed.items.length ? (
+          <div className="archive-record-grid">
+            {archiveItemFeed.items.map((item) => (
+              <ArchiveItemCard item={item} key={item.slug} />
+            ))}
+          </div>
+        ) : (
+          <p className="notice">
+            No public {collection.category.toLowerCase()} records have been added yet.
+          </p>
+        )}
       </section>
     </main>
   );

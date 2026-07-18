@@ -11,8 +11,10 @@ services:
       NEXT_TELEMETRY_DISABLED: "1"
       WATCHPACK_POLLING: "true"
       CHOKIDAR_USEPOLLING: "true"
-      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8080
+      NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8090
+      API_GATEWAY_INTERNAL_URL: http://api-gateway:8090
     volumes:
+      - ./frontend:/app
       - frontend-dev-node-modules:/app/node_modules
       - frontend-dev-next-cache:/app/.next
     develop:

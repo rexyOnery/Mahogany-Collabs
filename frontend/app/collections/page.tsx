@@ -1,9 +1,13 @@
+import { ArchiveItemCard } from "@/components/archive-item-card";
 import { CollectionCard } from "@/components/collection-card";
 import { SectionHeading } from "@/components/section-heading";
-import { getCollections } from "@/services/archive-service";
+import { getArchiveItemFeed, getCollections } from "@/services/archive-service";
 
 export default async function CollectionsPage() {
-  const collections = await getCollections();
+  const [collections, archiveItemFeed] = await Promise.all([
+    getCollections(),
+    getArchiveItemFeed({ limit: 12 })
+  ]);
 
   return (
     <main className="page-shell">
@@ -23,6 +27,27 @@ export default async function CollectionsPage() {
           ))}
         </div>
       </section>
+      {/* <section className="archive-catalog-section" id="new-additions">
+        <SectionHeading
+          eyebrow="From the archive database"
+          title="New Additions"
+          actionHref="/advanced-search"
+          actionLabel="Search all records →"
+        />
+        {archiveItemFeed.unavailable ? (
+          <p className="error-banner" role="alert">
+            Public archive items are temporarily unavailable.
+          </p>
+        ) : archiveItemFeed.items.length ? (
+          <div className="archive-record-grid">
+            {archiveItemFeed.items.map((item) => (
+              <ArchiveItemCard item={item} key={item.slug} />
+            ))}
+          </div>
+        ) : (
+          <p className="notice">No public archive items have been added yet.</p>
+        )}
+      </section> */}
     </main>
   );
 }

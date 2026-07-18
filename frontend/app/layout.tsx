@@ -6,8 +6,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Mahogany Archives",
-  description:
-    "A Next.js microservices starter for preserving and exploring African diaspora archive collections."
+  description: "Mahogany Archives — preserving and sharing cultural heritage."
 };
 
 export default function RootLayout({
@@ -16,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <Providers>
           <SiteHeader />
           {children}

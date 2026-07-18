@@ -6,39 +6,39 @@ import type {
 
 export const fallbackCollections: Collection[] = [
   {
-    title: "Rare Books and Texts",
+    title: "Rare Books & Texts",
     slug: "rare-books-and-texts",
     category: "Books",
     description:
       "Digitized editions, first printings, and annotated volumes preserving intellectual traditions across the diaspora.",
     itemCount: 12450,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-books.jpg",
     region: "West Africa, Caribbean, United States",
     period: "1750-1950",
     status: "published",
     featured: true
   },
   {
-    title: "Manuscripts and Letters",
+    title: "Manuscripts & Letters",
     slug: "manuscripts-and-letters",
     category: "Manuscripts",
     description:
       "Personal correspondence, field notes, estate records, and community papers from families and institutions.",
     itemCount: 8276,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-manuscripts.jpg",
     region: "Pan-African",
     period: "1800-1975",
     status: "published",
     featured: true
   },
   {
-    title: "Photographs and Prints",
+    title: "Photographs & Prints",
     slug: "photographs-and-prints",
     category: "Images",
     description:
       "Portraits, documentary photography, studio prints, and event records from public and private collections.",
     itemCount: 6189,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-photographs.jpg",
     region: "Global",
     period: "1860-1990",
     status: "published",
@@ -51,20 +51,20 @@ export const fallbackCollections: Collection[] = [
     description:
       "Recorded interviews, transcripts, and community memory projects with elders, educators, artists, and archivists.",
     itemCount: 3905,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-oral-history.jpg",
     region: "African Diaspora",
     period: "1930-present",
     status: "published",
     featured: true
   },
   {
-    title: "Artifacts and Ephemera",
+    title: "Artifacts & Ephemera",
     slug: "artifacts-and-ephemera",
     category: "Objects",
     description:
       "Posters, textiles, programs, catalog cards, and everyday materials that document cultural life.",
     itemCount: 2341,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-artifacts.jpg",
     region: "Global",
     period: "1850-present",
     status: "published",
@@ -75,7 +75,7 @@ export const fallbackCollections: Collection[] = [
 export const fallbackResources: LearningResource[] = [
   {
     title: "Teaching Resources",
-    description: "Lesson plans, primary sources, and classroom activities for all ages.",
+    description: "Lesson plans, primary sources, and activities for all ages.",
     href: "/learn#teaching"
   },
   {
@@ -84,13 +84,13 @@ export const fallbackResources: LearningResource[] = [
     href: "/learn#guides"
   },
   {
-    title: "Webinars and Events",
-    description: "Upcoming conversations with scholars and archivists.",
+    title: "Webinars & Events",
+    description: "Join conversations and learn from scholars and experts.",
     href: "/learn#events"
   },
   {
     title: "Exhibitions",
-    description: "Digital exhibits curated from archive materials.",
+    description: "Explore digital exhibits curated by our team.",
     href: "/learn#exhibitions"
   }
 ];
@@ -104,7 +104,7 @@ export const fallbackCommunity: CommunityHighlight[] = [
   {
     name: "Marcus Thompson",
     role: "Educator",
-    quote: "I use primary materials from the archive to bring real voices into my classroom."
+    quote: "I use primary materials from the Archives to bring real voices into my classroom."
   },
   {
     name: "Leah Mensah",

@@ -5,17 +5,19 @@ import { Archive, ClipboardCheck, Database, ShieldCheck } from "lucide-react";
 import { InfoCard } from "@/components/info-card";
 import { ProtectedRoute } from "@/components/protected-route";
 import { useAuth } from "@/hooks/use-auth";
+import { ArchiveItemUploadForm } from "./archive-item-upload-form";
 
 type Summary = {
   collections: number;
   published: number;
+  archiveItems: number;
   pendingSubmissions: number;
   preservationQueue: number;
   recentActivity: string[];
 };
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8080";
+  process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8090";
 
 export function AdminDashboard() {
   const { token } = useAuth();
@@ -63,8 +65,8 @@ export function AdminDashboard() {
           />
           <InfoCard
             icon={<Database size={24} />}
-            title="Published"
-            description={`${summary?.published ?? 0} collections visible to the public`}
+            title="Public Items"
+            description={`${summary?.archiveItems ?? 0} searchable image records`}
           />
           <InfoCard
             icon={<ClipboardCheck size={24} />}
@@ -77,6 +79,8 @@ export function AdminDashboard() {
             description={`${summary?.preservationQueue ?? 0} items awaiting review`}
           />
         </section>
+
+        <ArchiveItemUploadForm />
 
         <section className="activity-panel">
           <h2>Recent Activity</h2>

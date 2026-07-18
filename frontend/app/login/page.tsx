@@ -1,17 +1,28 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+
+const safeNextPath = (value: string | null) =>
+  value?.startsWith("/") && !value.startsWith("//") ? value : "";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [adminMode, setAdminMode] = useState(false);
+  const [nextPath, setNextPath] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setAdminMode(params.get("mode") === "admin" || params.get("next") === "/admin");
+    setNextPath(safeNextPath(params.get("next")));
+  }, []);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,7 +30,12 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const signedInUser = await login(email, password);
-      router.push(signedInUser.role === "admin" ? "/admin" : "/dashboard");
+      if (adminMode && signedInUser.role !== "admin") {
+        setError("This account is not an admin account. Create or use an admin account to upload archive images.");
+        return;
+      }
+
+      router.push(nextPath || (signedInUser.role === "admin" ? "/admin" : "/dashboard"));
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Login failed");
     } finally {
@@ -30,8 +46,13 @@ export default function LoginPage() {
   return (
     <main className="auth-shell">
       <form className="auth-form" onSubmit={onSubmit}>
-        <p className="eyebrow">Log In</p>
-        <h1>Return to the archive</h1>
+        <p className="eyebrow">{adminMode ? "Admin Log In" : "Log In"}</p>
+        <h1>{adminMode ? "Open archive operations" : "Return to the archive"}</h1>
+        <p className="auth-helper">
+          {adminMode
+            ? "Use an admin account to access the upload workspace."
+            : "Sign in to continue your archive session."}
+        </p>
         <label>
           Email
           <input
@@ -55,7 +76,10 @@ export default function LoginPage() {
           {loading ? "Signing in..." : "Log In"}
         </button>
         <p>
-          New here? <Link href="/sign-up">Create an account</Link>
+          New here?{" "}
+          <Link href={adminMode ? "/sign-up?role=admin&next=/admin" : "/sign-up"}>
+            Create an account
+          </Link>
         </p>
       </form>
     </main>
