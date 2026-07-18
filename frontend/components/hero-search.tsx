@@ -7,14 +7,15 @@ import { ChevronDown, Search } from "lucide-react";
 export function HeroSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [collection, setCollection] = useState("all");
+  const [materialType, setMaterialType] = useState("");
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const params = new URLSearchParams();
-    if (query) params.set("query", query);
-    if (collection !== "all") params.set("collection", collection);
-    router.push(`/advanced-search?${params.toString()}`);
+    if (query.trim()) params.set("search", query.trim());
+    if (materialType) params.set("materialType", materialType);
+    const queryString = params.toString();
+    router.push(queryString ? `/advanced-search?${queryString}` : "/advanced-search");
   };
 
   return (
@@ -30,14 +31,19 @@ export function HeroSearch() {
       <label className="select-wrap">
         <span className="sr-only">Collection filter</span>
         <select
-          name="collection"
-          value={collection}
-          onChange={(event) => setCollection(event.target.value)}
+          name="materialType"
+          value={materialType}
+          onChange={(event) => setMaterialType(event.target.value)}
         >
-          <option value="all">All Collections</option>
-          <option value="books">Books &amp; Texts</option>
-          <option value="manuscripts">Manuscripts</option>
-          <option value="images">Photographs</option>
+          <option value="">All formats</option>
+          <option value="Books">Books &amp; Texts</option>
+          <option value="Manuscripts">Manuscripts</option>
+          <option value="Images">Photographs</option>
+          <option value="Audio">Oral histories</option>
+          <option value="Objects">Objects</option>
+          <option value="Maps">Maps</option>
+          <option value="Language">Language</option>
+          <option value="Research">Research</option>
         </select>
         <ChevronDown size={16} />
       </label>

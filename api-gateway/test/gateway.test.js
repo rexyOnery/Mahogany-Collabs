@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   isPublicAdminGet,
+  isPublicArchiveImageRequest,
+  normalizeProxyResponseHeaders,
   stripUpstreamCorsHeaders
 } from "../src/app.js";
 import { env, getAllowedOrigins } from "../src/config/env.js";
@@ -25,6 +27,13 @@ test("archive item reads are public admin gateway routes", () => {
     isPublicAdminGet({ method: "POST", originalUrl: "/api/admin/items" }),
     false
   );
+  assert.equal(
+    isPublicAdminGet({
+      method: "HEAD",
+      originalUrl: "/api/admin/items/family-portrait/image"
+    }),
+    true
+  );
 });
 
 test("gateway allows localhost origins for frontend development", () => {
@@ -47,4 +56,42 @@ test("gateway owns CORS headers on proxied responses", () => {
   assert.deepEqual(proxyRes.headers, {
     "content-type": "application/json"
   });
+});
+
+test("public archive images can be embedded by the frontend origin", () => {
+  const proxyRes = {
+    headers: {
+      "access-control-allow-origin": "http://localhost:3000",
+      "cross-origin-resource-policy": "same-origin",
+      "content-type": "image/png"
+    }
+  };
+  const request = {
+    method: "GET",
+    originalUrl: "/api/admin/items/family-portrait/image"
+  };
+
+  assert.equal(isPublicArchiveImageRequest(request), true);
+  normalizeProxyResponseHeaders(proxyRes, request);
+
+  assert.deepEqual(proxyRes.headers, {
+    "cross-origin-resource-policy": "cross-origin",
+    "content-type": "image/png"
+  });
+});
+
+test("non-image API responses retain their resource policy", () => {
+  const proxyRes = {
+    headers: {
+      "cross-origin-resource-policy": "same-origin",
+      "content-type": "application/json"
+    }
+  };
+
+  normalizeProxyResponseHeaders(proxyRes, {
+    method: "GET",
+    originalUrl: "/api/admin/items/family-portrait"
+  });
+
+  assert.equal(proxyRes.headers["cross-origin-resource-policy"], "same-origin");
 });

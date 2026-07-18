@@ -8,7 +8,7 @@ const columns = [
       ["Collections", "/collections"],
       ["Advanced Search", "/advanced-search"],
       ["Browse by Topic", "/explore"],
-      ["New Additions", "/collections"],
+      ["New Additions", "/advanced-search"],
       ["Digital Exhibitions", "/learn#exhibitions"]
     ]
   },

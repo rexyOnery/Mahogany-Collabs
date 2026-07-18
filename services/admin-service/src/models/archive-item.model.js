@@ -172,17 +172,33 @@ const archiveItemSchema = new mongoose.Schema(
   }
 );
 
-archiveItemSchema.index({
+export const archiveItemTextIndexFields = {
   title: "text",
   shortDescription: "text",
   publicContent: "text",
+  materialType: "text",
+  rightsStatus: "text",
+  altText: "text",
   creator: "text",
+  dateOrPeriod: "text",
+  country: "text",
   region: "text",
   community: "text",
   language: "text",
   subjectTags: "text",
-  keywords: "text"
-});
+  keywords: "text",
+  sourceOrDonor: "text",
+  culturalSensitivityLabel: "text",
+  caption: "text"
+};
+
+export const archiveItemTextIndexOptions = {
+  name: "archive_item_text_search",
+  default_language: "none",
+  language_override: "archiveSearchLanguage"
+};
+
+archiveItemSchema.index(archiveItemTextIndexFields, archiveItemTextIndexOptions);
 
 export const ArchiveItem = mongoose.model("ArchiveItem", archiveItemSchema);
 export { accessLevels, publicationStatuses };

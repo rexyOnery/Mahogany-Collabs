@@ -29,7 +29,13 @@ app.use(
     windowMs: 15 * 60 * 1000,
     limit: 300,
     standardHeaders: "draft-7",
-    legacyHeaders: false
+    legacyHeaders: false,
+    skip: (req) => req.path === "/health",
+    handler: (req, res, next, options) =>
+      res.status(options.statusCode).json({
+        success: false,
+        message: "Too many requests. Please wait a few minutes and try again."
+      })
   })
 );
 app.use(express.json({ limit: "1mb" }));
@@ -43,14 +49,31 @@ export const stripUpstreamCorsHeaders = (proxyRes) => {
   }
 };
 
+export const isPublicArchiveImageRequest = (req) => {
+  if (!["GET", "HEAD"].includes(req.method)) {
+    return false;
+  }
+
+  const path = req.originalUrl.split("?")[0];
+  return /^\/api\/admin\/items\/[^/]+\/image$/.test(path);
+};
+
+export const normalizeProxyResponseHeaders = (proxyRes, req) => {
+  stripUpstreamCorsHeaders(proxyRes);
+
+  if (isPublicArchiveImageRequest(req)) {
+    proxyRes.headers["cross-origin-resource-policy"] = "cross-origin";
+  }
+};
+
 const proxy = (target, servicePrefix) =>
   createProxyMiddleware({
     target,
     changeOrigin: true,
     pathRewrite: (path) => `${servicePrefix}${path}`,
     on: {
-      proxyRes(proxyRes) {
-        stripUpstreamCorsHeaders(proxyRes);
+      proxyRes(proxyRes, req) {
+        normalizeProxyResponseHeaders(proxyRes, req);
       },
       proxyReq(proxyReq, req) {
         attachIdentityHeaders(proxyReq, req);
@@ -71,7 +94,7 @@ const proxy = (target, servicePrefix) =>
   });
 
 export const isPublicAdminGet = (req) => {
-  if (req.method !== "GET") {
+  if (!["GET", "HEAD"].includes(req.method)) {
     return false;
   }
 

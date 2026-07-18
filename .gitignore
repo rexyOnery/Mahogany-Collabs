@@ -19,6 +19,7 @@ services/admin-service/uploads/
 
 *.local
 *.log
+*.tsbuildinfo
 .DS_Store
 Thumbs.db
 

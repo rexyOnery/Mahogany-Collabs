@@ -31,6 +31,7 @@ export const archiveItemImage = asyncHandler(async (req, res) => {
   const data = await getArchiveItemImageBySlug(req.params.slug);
   res.setHeader("Content-Type", data.image.mimeType);
   res.setHeader("Cache-Control", "public, max-age=3600");
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   return res.sendFile(data.image.storagePath);
 });
 

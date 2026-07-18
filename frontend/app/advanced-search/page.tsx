@@ -1,6 +1,28 @@
 import { AdvancedSearchForm } from "@/features/search/advanced-search-form";
 
-export default function AdvancedSearchPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+const firstValue = (value: string | string[] | undefined) =>
+  Array.isArray(value) ? value[0] || "" : value || "";
+
+const legacyMaterialTypes: Record<string, string> = {
+  books: "Books",
+  manuscripts: "Manuscripts",
+  images: "Images"
+};
+
+export default async function AdvancedSearchPage({
+  searchParams
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const query = await searchParams;
+  const initialSearch = firstValue(query.search || query.query).trim();
+  const requestedMaterialType = firstValue(query.materialType).trim();
+  const legacyCollection = firstValue(query.collection).trim().toLowerCase();
+  const initialMaterialType =
+    requestedMaterialType || legacyMaterialTypes[legacyCollection] || "";
+
   return (
     <main className="page-shell">
       <section className="page-hero">
@@ -11,7 +33,12 @@ export default function AdvancedSearchPage() {
           keywords across the archive catalog.
         </p>
       </section>
-      <AdvancedSearchForm />
+      <AdvancedSearchForm
+        initialSearch={initialSearch}
+        initialMaterialType={initialMaterialType}
+        initialRegion={firstValue(query.region).trim()}
+        initialLanguage={firstValue(query.language).trim()}
+      />
     </main>
   );
 }

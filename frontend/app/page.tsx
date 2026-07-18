@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArchiveItemCard } from "@/components/archive-item-card";
 import { FeaturedCollectionsCarousel } from "@/components/featured-collections-carousel";
 import { HeroSearch } from "@/components/hero-search";
 import { archivePillars, exploreTools } from "@/lib/archive-data";
 import {
   getCommunityHighlights,
+  getArchiveItemFeed,
   getFeaturedCollections,
   getLearningResources
 } from "@/services/archive-service";
@@ -61,8 +63,9 @@ const resourceActions = [
 ];
 
 export default async function HomePage() {
-  const [collections, resources, community] = await Promise.all([
+  const [collections, archiveItemFeed, resources, community] = await Promise.all([
     getFeaturedCollections(),
+    getArchiveItemFeed({ limit: 4 }),
     getLearningResources(),
     getCommunityHighlights()
   ]);
@@ -112,6 +115,26 @@ export default async function HomePage() {
         </div>
         <FeaturedCollectionsCarousel collections={collections} />
       </section>
+
+      {/* <section id="new-additions" className="matched-section archive-home-additions">
+        <div className="matched-section-heading">
+          <h2>New Additions</h2>
+          <Link href="/advanced-search">Search all public records →</Link>
+        </div>
+        {archiveItemFeed.unavailable ? (
+          <p className="error-banner" role="alert">
+            New archive additions are temporarily unavailable.
+          </p>
+        ) : archiveItemFeed.items.length ? (
+          <div className="archive-record-grid archive-record-grid--home">
+            {archiveItemFeed.items.map((item) => (
+              <ArchiveItemCard item={item} key={item.slug} />
+            ))}
+          </div>
+        ) : (
+          <p className="notice">No public archive items have been added yet.</p>
+        )}
+      </section> */}
 
       <section id="explore" className="matched-explore-band">
         <div className="matched-explore-intro">

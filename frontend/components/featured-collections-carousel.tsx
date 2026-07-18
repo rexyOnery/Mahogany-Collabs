@@ -3,26 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef } from "react";
+import { getCollectionImage } from "@/lib/collection-images";
 import type { Collection } from "@/types/archive";
 
-type CarouselCollection = Pick<Collection, "slug" | "title" | "itemCount">;
-
-const collectionImages = [
-  { src: "/images/mahogany-archives/featured-books.jpg", alt: "Rare antique books" },
-  {
-    src: "/images/mahogany-archives/featured-manuscripts.jpg",
-    alt: "Handwritten manuscript"
-  },
-  {
-    src: "/images/mahogany-archives/featured-photographs.jpg",
-    alt: "Historic group photograph"
-  },
-  {
-    src: "/images/mahogany-archives/featured-oral-history.jpg",
-    alt: "Archival film reel and notes"
-  },
-  { src: "/images/mahogany-archives/featured-artifacts.jpg", alt: "Textile artifact" }
-];
+type CarouselCollection = Pick<
+  Collection,
+  "slug" | "title" | "itemCount" | "imageUrl"
+>;
 
 export function FeaturedCollectionsCarousel({
   collections
@@ -111,7 +98,7 @@ export function FeaturedCollectionsCarousel({
       >
         {renderedCollections.map((collection, index) => {
           const clone = index >= originals.length;
-          const image = collectionImages[index % collectionImages.length];
+          const image = getCollectionImage(collection);
 
           return (
             <Link

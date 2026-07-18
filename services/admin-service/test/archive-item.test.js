@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import sharp from "sharp";
+import { isCurrentArchiveTextIndex } from "../src/config/db.js";
+import {
+  ArchiveItem,
+  archiveItemTextIndexFields,
+  archiveItemTextIndexOptions
+} from "../src/models/archive-item.model.js";
 import {
   extractArchiveImageInfo,
   getPublicArchiveItemFilters,
@@ -87,4 +93,66 @@ test("archive item search limit stays inside launch bounds", () => {
   assert.equal(normalizeArchiveListLimit("12"), 12);
   assert.equal(normalizeArchiveListLimit("1000"), 50);
   assert.equal(normalizeArchiveListLimit("not-a-number"), 20);
+});
+
+test("archive text search does not reserve the archive language field", () => {
+  const textIndex = ArchiveItem.schema
+    .indexes()
+    .find(([, options]) => options.name === archiveItemTextIndexOptions.name);
+
+  assert.ok(textIndex);
+  assert.equal(textIndex[1].default_language, "none");
+  assert.equal(textIndex[1].language_override, "archiveSearchLanguage");
+  assert.notEqual(textIndex[1].language_override, "language");
+});
+
+test("archive text search covers admin-entered public discovery metadata", () => {
+  for (const field of [
+    "title",
+    "shortDescription",
+    "publicContent",
+    "materialType",
+    "rightsStatus",
+    "altText",
+    "creator",
+    "dateOrPeriod",
+    "country",
+    "region",
+    "community",
+    "language",
+    "subjectTags",
+    "keywords",
+    "sourceOrDonor",
+    "culturalSensitivityLabel",
+    "caption"
+  ]) {
+    assert.equal(archiveItemTextIndexFields[field], "text", `${field} is searchable`);
+  }
+
+  assert.equal(archiveItemTextIndexFields.internalNotes, undefined);
+});
+
+test("legacy Mongo text index options are detected for migration", () => {
+  assert.equal(
+    isCurrentArchiveTextIndex({
+      name: "title_text_language_text",
+      textIndexVersion: 3,
+      default_language: "english",
+      language_override: "language"
+    }),
+    false
+  );
+
+  assert.equal(
+    isCurrentArchiveTextIndex({
+      name: archiveItemTextIndexOptions.name,
+      textIndexVersion: 3,
+      default_language: archiveItemTextIndexOptions.default_language,
+      language_override: archiveItemTextIndexOptions.language_override,
+      weights: Object.fromEntries(
+        Object.keys(archiveItemTextIndexFields).map((field) => [field, 1])
+      )
+    }),
+    true
+  );
 });

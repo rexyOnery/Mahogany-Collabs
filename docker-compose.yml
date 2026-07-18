@@ -5,6 +5,7 @@ services:
     container_name: archive-frontend
     environment:
       NEXT_PUBLIC_API_GATEWAY_URL: http://localhost:8090
+      API_GATEWAY_INTERNAL_URL: http://api-gateway:8090
     ports:
       - "3000:3000"
     depends_on:
@@ -16,6 +17,7 @@ services:
       context: .
       dockerfile: api-gateway/Dockerfile
     container_name: archive-api-gateway
+    restart: unless-stopped
     environment:
       NODE_ENV: development
       API_GATEWAY_PORT: 8090
@@ -87,13 +89,17 @@ services:
       context: .
       dockerfile: services/admin-service/Dockerfile
     container_name: archive-admin-service
+    restart: unless-stopped
     environment:
       NODE_ENV: development
       ADMIN_SERVICE_PORT: 4003
       ADMIN_MONGO_URI: mongodb://admin-mongo:27017/archive_admin
       JWT_SECRET: ${JWT_SECRET:-replace-with-a-long-random-secret}
+      ARCHIVE_UPLOAD_DIR: uploads/archive-items
     ports:
       - "4003:4003"
+    volumes:
+      - admin-upload-data:/app/services/admin-service/uploads
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:4003/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 10s
@@ -122,6 +128,7 @@ services:
   admin-mongo:
     image: mongo:7
     container_name: archive-admin-mongo
+    restart: unless-stopped
     ports:
       - "27020:27017"
     volumes:
@@ -131,3 +138,4 @@ volumes:
   auth-mongo-data:
   user-mongo-data:
   admin-mongo-data:
+  admin-upload-data:

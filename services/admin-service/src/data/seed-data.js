@@ -6,7 +6,7 @@ export const seedCollections = [
     description:
       "Digitized editions, first printings, and annotated volumes preserving intellectual traditions across the diaspora.",
     itemCount: 12450,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-books.jpg",
     region: "West Africa, Caribbean, United States",
     period: "1750-1950",
     status: "published",
@@ -19,7 +19,7 @@ export const seedCollections = [
     description:
       "Personal correspondence, field notes, estate records, and community papers from families and institutions.",
     itemCount: 8276,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-manuscripts.jpg",
     region: "Pan-African",
     period: "1800-1975",
     status: "published",
@@ -32,7 +32,7 @@ export const seedCollections = [
     description:
       "Portraits, documentary photography, studio prints, and event records from public and private collections.",
     itemCount: 6189,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-photographs.jpg",
     region: "Global",
     period: "1860-1990",
     status: "published",
@@ -45,7 +45,7 @@ export const seedCollections = [
     description:
       "Recorded interviews, transcripts, and community memory projects with elders, educators, artists, and archivists.",
     itemCount: 3905,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-oral-history.jpg",
     region: "African Diaspora",
     period: "1930-present",
     status: "published",
@@ -58,7 +58,7 @@ export const seedCollections = [
     description:
       "Posters, textiles, programs, catalog cards, and everyday materials that document cultural life.",
     itemCount: 2341,
-    imageUrl: "/images/ebony.jpeg",
+    imageUrl: "/images/mahogany-archives/featured-artifacts.jpg",
     region: "Global",
     period: "1850-present",
     status: "published",
