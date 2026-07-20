@@ -25,3 +25,5 @@ Thumbs.db
 
 docker-data/
 .vercel/
+.vercel
+.env*
