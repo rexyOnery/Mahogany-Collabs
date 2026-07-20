@@ -8,7 +8,8 @@
     "start": "node src/index.js",
     "build": "node --check src/index.js",
     "lint": "node --check src/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "vercel-build": "node scripts/vercel-build.js"
   },
   "dependencies": {
     "@archive/shared": "file:../shared",
@@ -22,6 +23,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "esbuild": "^0.25.0",
     "nodemon": "^3.1.9"
   }
 }

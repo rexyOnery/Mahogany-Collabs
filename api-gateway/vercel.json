@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "name": "archive-api-gateway",
+  "buildCommand": "node scripts/vercel-build.js",
+  "installCommand": "npm install",
+  "outputDirectory": ".vercel/output/static",
+  "framework": null,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@3",
+      "maxDuration": 10,
+      "memory": 256
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.js"
+    }
+  ]
+}
+
