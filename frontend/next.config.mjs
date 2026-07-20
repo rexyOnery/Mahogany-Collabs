@@ -6,7 +6,7 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
+ // output: "standalone",
   reactStrictMode: true,
   turbopack: {
     // Correctly steps up to the monorepo root directory
