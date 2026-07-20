@@ -3061,9 +3061,9 @@ body {
 }
 
 .site-header.matched-site-header {
-  position: relative;
-  top: auto;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   gap: 2rem;
