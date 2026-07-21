@@ -7,7 +7,7 @@
   "framework": null,
   "functions": {
     "api/**/*.js": {
-      "runtime": "@vercel/node",
+      "runtime": "@vercel/node@4",
       "maxDuration": 30,
       "memory": 512
     }
