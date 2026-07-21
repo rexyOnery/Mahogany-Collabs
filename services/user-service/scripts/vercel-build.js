@@ -7,6 +7,7 @@
  * Usage: node scripts/vercel-build.js
  */
 
+import { mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,8 +17,9 @@ const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, "..");
 const OUTPUT_DIR = resolve(ROOT, ".vercel", "output", "static", "api");
 
-const esbuild = await import("esbuild");
+mkdirSync(OUTPUT_DIR, { recursive: true });
 
+const esbuild = await import("esbuild");
 const result = await esbuild.build({
   entryPoints: [resolve(ROOT, "api", "index.js")],
   outfile: resolve(OUTPUT_DIR, "index.js"),
