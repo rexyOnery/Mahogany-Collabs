@@ -159,6 +159,3 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_AUTH }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_AUTH }}
-</｜｜DSML｜｜parameter>
-</｜｜DSML｜｜invoke>
-</｜｜DSML｜｜tool_calls>
