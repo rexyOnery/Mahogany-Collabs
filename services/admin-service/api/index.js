@@ -3,7 +3,7 @@
 import mongoose from "mongoose";
 import app from "../src/app.js";
 import { env } from "../src/config/env.js";
-import { connectDb, ensureAdminIndexes } from "../src/config/db.js";
+import { ensureAdminIndexes } from "../src/config/db.js";
 import { seedArchiveData } from "../src/services/archive.service.js";
 import { logger } from "@archive/shared";
 
