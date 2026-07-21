@@ -16,9 +16,9 @@ const __dirname = dirname(__filename);
 
 const ROOT = resolve(__dirname, "..");
 const OUTPUT_DIR = resolve(ROOT, ".vercel", "output", "static", "api");
+mkdirSync(OUTPUT_DIR, { recursive: true });
 const SHARED_DIR = resolve(ROOT, "shared");
 const TMP_SHARED = resolve(ROOT, ".vercel", "shared");
-
 console.log("=== Vercel Build Debug ===");
 console.log("ROOT:", ROOT);
 console.log("Output dir:", OUTPUT_DIR);
