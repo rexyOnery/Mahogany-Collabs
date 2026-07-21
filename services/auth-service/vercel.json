@@ -2,12 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "name": "archive-auth-service",
+  "buildCommand": "npm run vercel-build",
   "installCommand": "npm install",
   "outputDirectory": ".",
   "framework": null,
   "functions": {
     "api/**/*.js": {
-      "runtime": "@vercel/node@3.0.0",
+      "runtime": "@vercel/node",
       "maxDuration": 30,
       "memory": 512
     }
@@ -19,3 +20,6 @@
     }
   ]
 }
+</｜｜DSML｜｜parameter>
+</｜｜DSML｜｜invoke>
+</｜｜DSML｜｜tool_calls>
