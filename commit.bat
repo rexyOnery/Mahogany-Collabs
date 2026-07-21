@@ -1,5 +1,6 @@
 @echo off
-cd /d "c:\Users\Dell\Documents\AfricanArchive\nextjs-archives"
+REM Run from the repository root (directory of this script)
+cd /d "%~dp0"
 git commit -m "feat: add Vercel deployment configs"
-git push origin blackboxai/ts-to-js-migration
+git push origin HEAD
 
