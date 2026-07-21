@@ -8,7 +8,7 @@
   "framework": null,
   "functions": {
     "api/**/*.js": {
-      "runtime": "@vercel/node",
+      "runtime": "@vercel/node@4",
       "maxDuration": 30,
       "memory": 512
     }
@@ -19,7 +19,4 @@
       "destination": "/api/index.js"
     }
   ]
-}
-</｜｜DSML｜｜parameter>
-</｜｜DSML｜｜invoke>
-</｜｜DSML｜｜tool_calls>
+} 

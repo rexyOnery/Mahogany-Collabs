@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-"scripts": {
+  "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "build": "node --check src/index.js",
