@@ -1,11 +1,11 @@
-FROM node:20-alpine AS dependencies
+FROM node:24-alpine AS dependencies
 WORKDIR /app
 COPY shared ./shared
 COPY services/user-service/package*.json ./services/user-service/
 WORKDIR /app/services/user-service
 RUN npm install --omit=dev
 
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=dependencies /app/shared ./shared

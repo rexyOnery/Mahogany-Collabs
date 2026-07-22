@@ -1,11 +1,11 @@
-FROM node:20-alpine AS dependencies
+FROM node:24-alpine AS dependencies
 WORKDIR /app
 COPY shared ./shared
 COPY services/auth-service/package*.json ./services/auth-service/
 WORKDIR /app/services/auth-service
 RUN npm install --omit=dev
 
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=dependencies /app/shared ./shared
