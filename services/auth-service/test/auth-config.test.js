@@ -9,15 +9,15 @@ test("auth service exposes a port and JWT expiry", () => {
   assert.ok(env.jwtExpiresIn);
 });
 
-test("registration validation allows explicit admin accounts", () => {
-  const result = registerSchema.parse({
+test("public registration rejects explicit admin accounts", () => {
+  const result = registerSchema.safeParse({
     name: "Archive Admin",
     email: "admin@example.com",
     password: "secure-password",
     role: "admin"
   });
 
-  assert.equal(result.role, "admin");
+  assert.equal(result.success, false);
 });
 
 test("access tokens preserve admin role for protected upload routes", () => {

@@ -1,11 +1,9 @@
 import crypto from "node:crypto";
-import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { del, put } from "@vercel/blob";
 import sharp from "sharp";
 import slugify from "slugify";
 import { ApiError, notFound } from "@archive/shared";
-import { env } from "../config/env.js";
 import { ArchiveItem } from "../models/archive-item.model.js";
 import { Collection } from "../models/collection.model.js";
 import { Submission } from "../models/submission.model.js";
@@ -15,10 +13,6 @@ import {
   seedCollections,
   seedSubmissions
 } from "../data/seed-data.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const serviceRoot = path.resolve(__dirname, "../..");
-const uploadDir = path.resolve(serviceRoot, env.archiveUploadDir);
 
 export const seedArchiveData = async () => {
   const collectionCount = await Collection.countDocuments();
@@ -157,9 +151,9 @@ export const getArchiveItemImageBySlug = async (slug) => {
     slug,
     publicationStatus: "published",
     accessLevel: "public"
-  }).select("+image.storagePath");
+  });
 
-  if (!item?.image?.storagePath) {
+  if (!item?.image?.imageUrl) {
     throw notFound("Archive item image");
   }
 
@@ -171,10 +165,11 @@ export const createArchiveItem = async (input, file, identity) => {
   const extractedImage = await extractArchiveImageInfo(file);
   const extension = extensionForFormat(extractedImage.format, extractedImage.originalFilename);
   const storedFilename = `${slug}-${Date.now()}.${extension}`;
-  const storagePath = path.join(uploadDir, storedFilename);
-
-  await fs.mkdir(uploadDir, { recursive: true });
-  await fs.writeFile(storagePath, file.buffer);
+  const blob = await put(`archive-items/${storedFilename}`, file.buffer, {
+    access: "public",
+    contentType: extractedImage.mimeType,
+    addRandomSuffix: false
+  });
 
   try {
     const item = await ArchiveItem.create({
@@ -184,8 +179,8 @@ export const createArchiveItem = async (input, file, identity) => {
       keywords: input.keywords || [],
       image: {
         ...extractedImage,
-        storagePath,
-        imageUrl: `/admin/items/${slug}/image`
+        storagePath: blob.pathname,
+        imageUrl: blob.url
       },
       createdBy: identity?.sub || identity?.email || "system",
       updatedBy: identity?.sub || identity?.email || "system"
@@ -193,7 +188,7 @@ export const createArchiveItem = async (input, file, identity) => {
 
     return toPublicArchiveItem(item);
   } catch (error) {
-    await fs.rm(storagePath, { force: true }).catch(() => undefined);
+    await del(blob.url).catch(() => undefined);
     throw error;
   }
 };

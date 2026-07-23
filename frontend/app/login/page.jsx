@@ -31,7 +31,7 @@ export default function LoginPage() {
     try {
       const signedInUser = await login(email, password);
       if (adminMode && signedInUser.role !== "admin") {
-        setError("This account is not an admin account. Create or use an admin account to upload archive images.");
+        setError("This account is not an administrator. Contact the archive team if you need access.");
         return;
       }
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
         </button>
         <p>
           New here?{" "}
-          <Link href={adminMode ? "/sign-up?role=admin&next=/admin" : "/sign-up"}>
+          <Link href="/sign-up">
             Create an account
           </Link>
         </p>

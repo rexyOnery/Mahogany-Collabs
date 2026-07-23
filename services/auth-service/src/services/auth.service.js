@@ -8,7 +8,7 @@ const toAuthPayload = (user) => ({
   token: signAccessToken(user)
 });
 
-export const registerUser = async ({ name, email, password, role }) => {
+export const registerUser = async ({ name, email, password }) => {
   const existing = await User.findOne({ email });
   if (existing) {
     throw new ApiError(409, "A user with this email already exists");
@@ -19,7 +19,7 @@ export const registerUser = async ({ name, email, password, role }) => {
     name,
     email,
     passwordHash,
-    role: role || "user"
+    role: "user"
   });
 
   return toAuthPayload(user);

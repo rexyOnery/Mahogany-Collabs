@@ -29,10 +29,7 @@ export const archiveItemDetail = asyncHandler(async (req, res) => {
 
 export const archiveItemImage = asyncHandler(async (req, res) => {
   const data = await getArchiveItemImageBySlug(req.params.slug);
-  res.setHeader("Content-Type", data.image.mimeType);
-  res.setHeader("Cache-Control", "public, max-age=3600");
-  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-  return res.sendFile(data.image.storagePath);
+  return res.redirect(302, data.image.imageUrl);
 });
 
 export const collections = asyncHandler(async (req, res) => {

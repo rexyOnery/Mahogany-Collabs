@@ -1,10 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "archive-auth-service",
-  "buildCommand": "npm run vercel-build",
   "installCommand": "npm install",
-  "outputDirectory": ".",
   "framework": null,
   "functions": {
     "api/**/*.js": {
