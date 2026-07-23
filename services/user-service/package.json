@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
+"scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "build": "node --check src/index.js",
@@ -11,7 +11,7 @@
     "test": "node --test"
   },
   "dependencies": {
-    "@archive/shared": "file:../../shared",
+    "@archive/shared": "file:./shared",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -22,6 +22,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "esbuild": "^0.28.1",
     "nodemon": "^3.1.9"
   }
 }

@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
+"scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
     "build": "node --check src/index.js",
     "lint": "node --check src/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "vercel-build": "node scripts/vercel-build.js"
   },
   "dependencies": {
-    "@archive/shared": "file:../../shared",
+    "@archive/shared": "file:./shared",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -23,6 +24,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "esbuild": "^0.28.1",
     "nodemon": "^3.1.9"
   }
 }
